@@ -1,27 +1,26 @@
 #!/usr/bin/python3
-"""A module that rotates a matrix by 90 degrees clockwise.
 """
-
-from copy import deepcopy
+A module that rotates a matrix by 90 degrees clockwise.
+"""
 
 
 def rotate_2d_matrix(matrix):
-    """Rotate the given 2D matrix by 90 degrees clockwise in place.
-
+    """Rotate two dimension matrix 90 degrees clockwise
     Args:
-        matrix (list of list of int): The matrix to rotate.
-
-    Returns:
-        None: The matrix is rotated in place.
+        matrix (list[[list]]): a matrix
     """
-    # A deep copy of the matrix to avoid altering the original while rotating
-    copy_matrix = deepcopy(matrix)
-    matrix.clear()
-
-    # Reverse the copied matrix to prepare for the rotation
-    copy_matrix.reverse()
-
-    # Populate the original matrix with the rotated values
-    for idx in range(len(copy_matrix)):
-        temp_row = [element[idx] for element in copy_matrix]
-        matrix.append(temp_row)
+    n = len(matrix)
+    for i in range(int(n / 2)):
+        y = (n - i - 1)
+        for j in range(i, y):
+            x = (n - 1 - j)
+            # current number
+            tmp = matrix[i][j]
+            # change top for left
+            matrix[i][j] = matrix[x][i]
+            # change left for bottom
+            matrix[x][i] = matrix[y][x]
+            # change bottom for right
+            matrix[y][x] = matrix[j][y]
+            # change right for top
+            matrix[j][y] = tmp
