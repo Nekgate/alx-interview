@@ -1,47 +1,47 @@
 #!/usr/bin/python3
-
-""" Prime Game. """
-
-
-def check_prime(n):
-    """ Check if n is a prime number. """
-    for i in range(2, int(n ** 0.5) + 1):
-        if not n % i:
-            return False
-        return False
+"""
+Define isWineer function, a solution to the Prime Game problem
+"""
 
 
-def add_prime(n, primes):
-    """ Add prime to list. """
-    last_prime = primes[-1]
-    if n > last_prime:
-        for i in range(last_prime + 1, n + 1):
-            if check_prime(i):
-                primes.append(i)
-            else:
-                primes.append(0)
+def primes(n):
+    """Return list of prime numbers between 1 and n inclusive
+       Args:
+        n (int): upper boundary of range. lower boundary is always 1
+    """
+    prime = []  # List to store prime numbers
+    sieve = [True] * (n + 1)  # Boolean array to mark prime numbers
+    for p in range(2, n + 1):
+        if (sieve[p]):  # If p is a prime number
+            prime.append(p)  # Add p to the list of primes
+            for i in range(p, n + 1, p):
+                sieve[i] = False  # Mark multiples of p as non-prime
+    return prime
 
 
 def isWinner(x, nums):
-    """ x is the number of rounds and nums is array of n
-    Return: Name of the player that won the most rounds,
-    If the winner cannot be determined, return None.
     """
-    score = {"Maria": 0, "Ben": 0}
-    primes = [0, 0, 2]
-    add_prime(max(nums), primes)
+    Determines winner of Prime Game
+    Args:
+        x (int): no. of rounds of game
+        nums (int): upper limit of range for each round
+    Return:
+        Name of winner (Maria or Ben) or None if winner cannot be found
+    """
+    if x is None or nums is None or x == 0 or nums == []:
+        return None
 
-    for round in range(x):
-        _sum = sum((i != 0 and i <= nums[round])
-                   for i in primes[:nums[round] + 1])
-        if (_sum % 2):
-            winner = "Maria"
+    Maria = Ben = 0  # Initialize scores for Maria and Ben
+
+    for i in range(x):  # Loop through each round
+        prime = primes(nums[i])  # Get the list of primes for the current round
+        if len(prime) % 2 == 0:  # If the number of primes is even
+            Ben += 1  # Ben wins this round
         else:
-            winner = "Ben"
-        if winner:
-            score[winner] += 1
+            Maria += 1  # Maria wins this round
 
-    if score["Maria"] > score["Ben"]:
-        return "Ben"
-
-    return None
+    if Maria > Ben:
+        return 'Maria'  # Maria is the overall winner
+    elif Ben > Maria:
+        return 'Ben'  # Ben is the overall winner
+    return None  # Return None if the game is a tie
